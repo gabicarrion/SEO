@@ -8,7 +8,7 @@ def clean_category_values(series):
 
 def process_semrush_categories(df):
     """Process SemRush data to handle multiple categories per issue"""
-    # Create expanded dataframe with split categories
+
     expanded_rows = []
     for _, row in df.iterrows():
         if pd.notna(row['Issue category - SemRush']) and row['Issue category - SemRush'] != 'NA':
@@ -18,13 +18,16 @@ def process_semrush_categories(df):
                     new_row = row.copy()
                     new_row['Issue category - SemRush'] = category
                     expanded_rows.append(new_row)
+
+    processed_df = pd.DataFrame(expanded_rows)
     
-    return pd.DataFrame(expanded_rows)
+    return processed_df
+
 
 def get_issue_stats(issues_df):
     """Calculate issue statistics by type"""
     return {
-        'Issues': len(issues_df[issues_df['Issue Type - SemRush'] == 'Error']),
+        'Errors': len(issues_df[issues_df['Issue Type - SemRush'] == 'Error']),
         'Warnings': len(issues_df[issues_df['Issue Type - SemRush'] == 'Warning']),
         'Notices': len(issues_df[issues_df['Issue Type - SemRush'] == 'Notice'])
     }
